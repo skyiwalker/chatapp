@@ -1,5 +1,6 @@
 package com.supersark.chatapp;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -31,8 +35,12 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String stText = etText.getText().toString();
-
-                Toast.makeText(ChatActivity.this, stText, Toast.LENGTH_SHORT).show();
+                String email = getUserEmail();
+                if(stText.equals("") || email.isEmpty()) {
+                    Toast.makeText(ChatActivity.this, "내용을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ChatActivity.this, email+","+stText, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -59,5 +67,33 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String getUserEmail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email="";
+        if (user != null) {
+            email = user.getEmail();
+        }
+        return email;
+    }
+
+    private void getUserInformation()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getToken() instead.
+            String uid = user.getUid();
+        }
     }
 }
