@@ -12,6 +12,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -40,6 +48,17 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.makeText(ChatActivity.this, "내용을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ChatActivity.this, email+","+stText, Toast.LENGTH_SHORT).show();
+
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String date = df.format(Calendar.getInstance().getTime());
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("chat").child(date);
+
+                    Hashtable<String, String> chat = new Hashtable<>();
+                    chat.put("email", email);
+                    chat.put("text", stText);
+                    myRef.setValue(chat);
                 }
             }
         });
