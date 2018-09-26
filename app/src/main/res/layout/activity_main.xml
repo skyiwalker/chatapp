@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#1b6ed4"
+    >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="30dp"
+            android:textSize="30dp"
+            android:text="Login" />
+
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/loginText"
+            android:background="#ffffff"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="ID" />
+        <EditText
+            android:id="@+id/pwdText"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/emailText"
+            android:layout_marginTop="1dp"
+            android:background="#ffffff"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="PASSWORD" />
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pwdText"
+            android:layout_marginTop="1dp"
+            android:text="REGISTER" />
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/registerButton"
+            android:layout_marginTop="1dp"
+            android:text="LOGIN" />
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginButton"
+            android:layout_marginTop="1dp"
+            android:text="CANCEL" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/progBar"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>
