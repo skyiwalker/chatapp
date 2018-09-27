@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,14 +13,20 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -27,18 +34,82 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    String[] myDataset = {"안녕","오늘","뭐했어","영화볼래?"};
 
     EditText etText;
     Button btnSend;
 
-        @Override
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
+    List<Chat> mChats;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
         etText = findViewById(R.id.etText);
         btnSend = findViewById(R.id.sendButton);
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("chat");
+
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter
+        mChats = new ArrayList<>();
+        mAdapter = new MyAdapter(mChats);
+        mRecyclerView.setAdapter(mAdapter);
+
+        Button finishButton = findViewById(R.id.finishButton);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // A new comment has been added, add it to the displayed list
+                Chat chat = dataSnapshot.getValue(Chat.class);
+
+                // Update RecyclerView
+                mChats.add(chat);
+                mAdapter.notifyItemInserted(mChats.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        myRef.addChildEventListener(childEventListener);
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,37 +123,13 @@ public class ChatActivity extends AppCompatActivity {
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String date = df.format(Calendar.getInstance().getTime());
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference("chat").child(date);
+                    myRef = database.getReference("chat").child(date);
 
                     Hashtable<String, String> chat = new Hashtable<>();
                     chat.put("email", email);
                     chat.put("text", stText);
                     myRef.setValue(chat);
                 }
-            }
-        });
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
-        Button finishButton = findViewById(R.id.finishButton);
-
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 
