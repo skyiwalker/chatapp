@@ -10,6 +10,7 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<Chat> mChats;
+    private String mEmail;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -24,8 +25,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Chat> myChats) {
+    public MyAdapter(List<Chat> myChats, String myEmail) {
         mChats = myChats;
+        mEmail = myEmail;
     }
 
     // Create new views (invoked by the layout manager)
@@ -33,8 +35,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                      int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
+        View v;
+        if(viewType == 0) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.right_text_view, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.my_text_view, parent, false);
+        }
 
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
@@ -53,5 +61,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public int getItemCount() {
         return mChats.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(mChats.get(position).getEmail().equals(mEmail)) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

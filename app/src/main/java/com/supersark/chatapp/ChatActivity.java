@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // specify an adapter
         mChats = new ArrayList<>();
-        mAdapter = new MyAdapter(mChats);
+        mAdapter = new MyAdapter(mChats,getUserEmail());
         mRecyclerView.setAdapter(mAdapter);
 
         Button finishButton = findViewById(R.id.finishButton);
@@ -85,6 +85,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 // Update RecyclerView
                 mChats.add(chat);
+                mRecyclerView.scrollToPosition(mChats.size()-1);
                 mAdapter.notifyItemInserted(mChats.size() - 1);
             }
 
@@ -130,6 +131,7 @@ public class ChatActivity extends AppCompatActivity {
                     chat.put("text", stText);
                     myRef.setValue(chat);
                 }
+                etText.setText("");
             }
         });
 

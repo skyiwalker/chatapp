@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void userSignUp(String id, String pwd)
     {
+        if(id.isEmpty() || pwd.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please Insert ID and Password.",
+                    Toast.LENGTH_SHORT).show();
+        }
         mAuth.createUserWithEmailAndPassword(id, pwd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -94,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void userLogin(String id, String pwd)
     {
+        if(id.isEmpty() || pwd.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please Insert ID and Password.",
+                    Toast.LENGTH_SHORT).show();
+        }
         pbBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(id, pwd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
