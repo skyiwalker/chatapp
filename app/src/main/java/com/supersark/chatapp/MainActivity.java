@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         if(id.isEmpty() || pwd.isEmpty()) {
             Toast.makeText(MainActivity.this, "Please Insert ID and Password.",
                     Toast.LENGTH_SHORT).show();
+            return;
         }
         mAuth.createUserWithEmailAndPassword(id, pwd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         if(id.isEmpty() || pwd.isEmpty()) {
             Toast.makeText(MainActivity.this, "Please Insert ID and Password.",
                     Toast.LENGTH_SHORT).show();
+            return;
         }
         pbBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(id, pwd)
