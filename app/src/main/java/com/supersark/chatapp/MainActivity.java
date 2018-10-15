@@ -1,6 +1,8 @@
 package com.supersark.chatapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.support.annotation.NonNull;
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
+        pbBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(id, pwd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
+                            pbBar.setVisibility(View.GONE);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
+                            pbBar.setVisibility(View.GONE);
                         }
 
                         // ...
@@ -114,8 +119,13 @@ public class MainActivity extends AppCompatActivity {
                             pbBar.setVisibility(View.GONE);
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                            Intent intent = new Intent(MainActivity.this, TabActivity.class);
                             startActivity(intent);
+                            SharedPreferences sharedPref = getSharedPreferences("profile",Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("uid", user.getUid());
+                            editor.putString("email", user.getEmail());
+                            editor.commit();
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

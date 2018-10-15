@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "746770181132-f3dgs27317ii2v1kssiij4ofv84cr5pi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.supersark.chatapp",
+            "certificate_hash": "9750c5b8a7eb554c73a9362369ba4d104aa65721"
+          }
+        },
+        {
           "client_id": "746770181132-ehnc8f0eoo305lidaargtkgd0rb8m21b.apps.googleusercontent.com",
           "client_type": 3
         }
